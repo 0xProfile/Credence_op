@@ -1,5 +1,6 @@
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { useAccount } from "wagmi";
+import './index.css';
 
 import { Attestooooooor } from "./components";
 
@@ -12,7 +13,8 @@ export function App() {
 
   return (
     <>
-      <h1>OP Eth Denver Hackathon</h1>
+      <h1 className="text-3xl font-bold underline">OP Eth Denver Hackathon</h1>
+
 
       {/** @see https://www.rainbowkit.com/docs/connect-button */}
       <ConnectButton />
