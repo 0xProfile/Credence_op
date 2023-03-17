@@ -1,16 +1,20 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import Skeleton from "./Skeleton";
 
 interface ITableProps {
   headers: string[];
   contents: Record<string, string>[];
+  loading?: boolean
 }
 
-export const Table = ({headers, contents}: ITableProps) => {
+export const Table = ({headers, contents, loading=false}: ITableProps) => {
   const navigate = useNavigate();
 
-  return (<div className="overflow-x-auto">
-    <table className="table table-zebra w-full text-center">
+  if (loading) return <Skeleton />
+
+  return (<div className="">
+    <table className="table-fixed table table-zebra w-full text-center">
       <thead>
         <tr>
           {
@@ -28,7 +32,7 @@ export const Table = ({headers, contents}: ITableProps) => {
             }}>
               {
                 headers.map((header, td_index) => (
-                  <td key={`td-${td_index}`} className="text-ellipsis">{content[header]}</td>
+                  <td key={`td-${td_index}`} className="overflow-hidden text-ellipsis">{content[header]}</td>
                 ))
               }
             </tr>
