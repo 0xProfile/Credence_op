@@ -28,11 +28,11 @@ export const Table = ({headers, contents, loading=false}: ITableProps) => {
         {
           contents.map((content, tr_index) => (
             <tr key={`tr-${tr_index}`} className="cursor-pointer" onClick={() => {
-              navigate(`/attestation/${content[headers[0]]}`);
+              navigate(`/attestation/${content['id']}`);
             }}>
               {
                 headers.map((header, td_index) => (
-                  <td key={`td-${td_index}`} className="overflow-hidden text-ellipsis">{content[header]}</td>
+                  <td key={`td-${td_index}`}  className="overflow-hidden text-ellipsis">{content[header]}</td>
                 ))
               }
             </tr>

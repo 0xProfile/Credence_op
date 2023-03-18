@@ -9,16 +9,17 @@ const TABLE_HEADERS = ["about", "key", "value"];
 export default function Home() {
   const { loading, error, data } = useQuery(querys.LATEST_ATTESTATION);
   const [ mappedData, setMappedData ] = React.useState([]);
+
   const navigate = useNavigate();
   useEffect(() => {
     if (data) {
-      console.log(data)
       const mappedData = data.attestationCreateds.map((item: any) => {
         return {
           about: item.about,
           // TODO: fix parsing error?
           key: item.key,
           value: item.val,
+          id: item.id,
         };
       });
       setMappedData(mappedData);
@@ -26,7 +27,7 @@ export default function Home() {
   }, [data]);
   if (error) navigate('/error');
   return (
-    <div className="container p-2 flex justify-center">
+    <div className="container p-2 flex m-auto justify-center">
       <div className="card w-3/4 bg-base-100 shadow-xl">
         <div className="card-body">
           <h2 className="card-title text-center justify-center">Recent attestations</h2>
