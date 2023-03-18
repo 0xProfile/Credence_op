@@ -10,14 +10,19 @@ import { chains, client } from "./wagmi";
 import './index.css';
 
 import Root from "./Pages/Root";
-import Assert from "./Pages/Assert";
+import Attestation from "./Pages/Attestation";
 import Home from "./Pages/Home";
 import Error from "./Pages/Error";
+import MakeAttestation from "./Pages/MakeAttestation";
 
 import store from "./store";
 
 import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client'
 import { APIURL } from "./constants";
+
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 
 
 const Router = createBrowserRouter([{
@@ -26,7 +31,8 @@ const Router = createBrowserRouter([{
   errorElement: <Error />,
   children: [
     { index: true, element: <Home /> },
-    { path: "assert/:assertId", element: <Assert /> },
+    { path: "attestation/:attestationId", element: <Attestation /> },
+    { path: "make/attestation", element: <MakeAttestation /> },
   ],
 }]);
 

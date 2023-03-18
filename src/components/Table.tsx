@@ -28,7 +28,7 @@ export const Table = ({headers, contents, loading=false}: ITableProps) => {
         {
           contents.map((content, tr_index) => (
             <tr key={`tr-${tr_index}`} className="cursor-pointer" onClick={() => {
-              navigate(`/assert/${content[headers[0]]}`);
+              navigate(`/attestation/${content[headers[0]]}`);
             }}>
               {
                 headers.map((header, td_index) => (
