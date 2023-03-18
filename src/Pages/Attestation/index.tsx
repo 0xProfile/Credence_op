@@ -39,7 +39,7 @@ export default function attestation() {
             </div>
             <div className="flex flex-row justify-center items-center">
               <span className="text-xl font-bold">Transaction: </span>
-              <a className="text-xl link" href={`${network.chain?.blockExplorers?.default.url}/tx/${data.attestationCreated.transactionHash}`}>{data.attestationCreated.transactionHash}</a>
+              <a className="text-xl link" href={`${network.chain?.blockExplorers?.default.url}/tx/${data.attestationCreated.transactionHash}`} target="_blank">{data.attestationCreated.transactionHash}</a>
             </div>
           </div>
         </div>

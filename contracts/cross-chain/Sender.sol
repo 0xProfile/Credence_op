@@ -1,11 +1,16 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.9;
 
+// Uncomment this line to use console.log
+// import "hardhat/console.sol";
+
 import "@hyperlane-xyz/core/interfaces/IMailbox.sol";
 import "@hyperlane-xyz/core/interfaces/IInterchainGasPaymaster.sol";
 
 contract HyperlaneMessageSender {
   address owner = 0x1e225BBf3347497B4898e6DAB028A8800bDcd447;
+
+  uint256 gasAmount = 50000;
 
   IMailbox outbox = IMailbox(0xCC737a94FecaeC165AbCf12dED095BB13F037685);
   IInterchainGasPaymaster igp =
@@ -29,10 +34,15 @@ contract HyperlaneMessageSender {
 
   function checkQuotedPayment(
     uint32 _destinationDomain,
-    uint256 gasAmount
+    uint256 _gasAmount
   ) public view returns (uint256) {
-    uint256 quotedPayment = igp.quoteGasPayment(_destinationDomain, gasAmount);
+    uint256 quotedPayment = igp.quoteGasPayment(_destinationDomain, _gasAmount);
     return quotedPayment;
+  }
+
+  function dyamicGas(uint256 _gasAmount) external {
+    require(msg.sender == owner, "Only the contract owner can change gas");
+    gasAmount = _gasAmount;
   }
 
   function sendString(
@@ -45,7 +55,6 @@ contract HyperlaneMessageSender {
       addressToBytes32(_recipient),
       bytes(_message)
     );
-    uint256 gasAmount = 50000;
     uint256 quotedPayment = igp.quoteGasPayment(_destinationDomain, gasAmount);
 
     igp.payForGas{value: quotedPayment}(
