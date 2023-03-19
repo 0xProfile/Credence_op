@@ -40,6 +40,7 @@ export const Table = ({ headers, contents, loading = false, isCrossChain = false
             >
               {headers.map((header, td_index) => {
                 if (header === "isCrossChain") {
+                  // TODO: should put it outside of Table, we can pass a jsx object instead of boolean
                   return (
                     <td key={`td-${td_index}`} className="overflow-hidden text-ellipsis">
                       {content[header] ?

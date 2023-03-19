@@ -30,7 +30,6 @@ export default function MakeAttestation() {
   const { isConnected } = useAccount();
   const { openChainModal } = useChainModal();
   const { chain, chains } = useNetwork();
-  const { data: signer } = useSigner();
 
   const [attestHistory, setAttestHistory] = useState<any>([]);
   const [selectedOption, setSelectedOption] = useState("");
@@ -102,7 +101,7 @@ export default function MakeAttestation() {
       return;
     } else {
       const prepAttest = await prepareWriteAttestation(about, key, value);
-      setAttestHistory([...attestHistory, { about, key, value, isCrossChain: false}]);
+      setAttestHistory([{ about, key, value, isCrossChain: false}, ...attestHistory, ]);
       const tx = await writeAttestation(prepAttest);
       const receipt = await tx.wait();
     }

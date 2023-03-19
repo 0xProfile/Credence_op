@@ -3,15 +3,19 @@ import { createSlice } from "@reduxjs/toolkit";
 export const searchSlice = createSlice({
   name: "searchValue",
   initialState: {
-    value: "",
+    searchValue: "",
+    searchType: "Addr",
   },
   reducers: {
     updateSearchValue: (state, action) => {
-      state.value = action.payload;
+      state.searchValue = action.payload.searchValue;
+    },
+    updateSearchType: (state, action) => {
+      state.searchType = action.payload.searchType;
     },
   },
 });
 
-export const { updateSearchValue } = searchSlice.actions;
+export const { updateSearchValue, updateSearchType } = searchSlice.actions;
 
 export default searchSlice.reducer;

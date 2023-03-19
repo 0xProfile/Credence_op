@@ -14,6 +14,7 @@ import Attestation from "./Pages/Attestation";
 import Home from "./Pages/Home";
 import Error from "./Pages/Error";
 import MakeAttestation from "./Pages/MakeAttestation";
+import Search from "./Pages/Search";
 
 import store from "./store";
 
@@ -33,6 +34,7 @@ const Router = createBrowserRouter([{
     { index: true, element: <Home /> },
     { path: "attestation/:attestationId", element: <Attestation /> },
     { path: "make/attestation", element: <MakeAttestation /> },
+    { path: "search/:searchType/:searchValue", element: <Search /> },
   ],
 }]);
 
