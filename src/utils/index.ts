@@ -22,4 +22,32 @@ const parseHexString = (str: string): number[] => {
   return result;
 };
 
-export { encodeRawKey, parseHexString };
+const tryConvertBytes32ToString = (bytes32Value: string) => {
+  try {
+    const stringValue = ethers.utils.parseBytes32String(bytes32Value);
+    return stringValue;
+  } catch (error) {
+    console.error("Failed to convert bytes32 to string:", error);
+    return bytes32Value;
+  }
+};
+
+const tryConvertBytesToString = (bytesValue: string) => {
+  try {
+    const stringValue = Buffer.from(
+      bytesValue.replace(/^0x/, ""),
+      "hex",
+    ).toString("utf-8");
+    return stringValue;
+  } catch (error) {
+    console.error("Failed to convert Solidity bytes to string:", error);
+    return bytesValue;
+  }
+};
+
+export {
+  encodeRawKey,
+  parseHexString,
+  tryConvertBytes32ToString,
+  tryConvertBytesToString,
+};

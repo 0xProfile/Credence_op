@@ -3,6 +3,7 @@ import { Table } from "../../components";
 import { useQuery } from '@apollo/client';
 import { querys } from "../../constants";
 import { useNavigate } from "react-router-dom";
+import { tryConvertBytes32ToString, tryConvertBytesToString } from "../../utils";
 
 const TABLE_HEADERS = ["about", "key", "value"];
 
@@ -17,8 +18,8 @@ export default function Home() {
         return {
           about: item.about,
           // TODO: fix parsing error?
-          key: item.key,
-          value: item.val,
+          key: tryConvertBytes32ToString(item.key),
+          value: tryConvertBytesToString(item.val),
           id: item.id,
         };
       });
