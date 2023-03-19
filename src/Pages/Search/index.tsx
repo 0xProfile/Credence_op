@@ -6,11 +6,14 @@ import { querys } from "../../constants";
 import { Table } from "../../components";
 import Skeleton from "../../components/Skeleton";
 import { createKey, readAttestationString } from "@eth-optimism/atst";
+import { tryConvertBytes32ToString, tryConvertBytesToString } from "../../utils";
 
 
 export default function Search() {
   let { searchType, searchValue } = useParams();
   const [currentPage, setCurrentPage] = React.useState(0);
+  const [ mappedData, setMappedData ] = React.useState([]);
+
   const navigate = useNavigate();
 
   if (searchType === undefined || searchValue === undefined || searchType === '' || searchValue === '') return <Error />;
@@ -40,6 +43,21 @@ export default function Search() {
     }
   });
 
+  useEffect(() => {
+    if (data) {
+      const mappedData = data.attestationCreateds.map((item: any) => {
+        return {
+          about: item.about,
+          key: tryConvertBytes32ToString(item.key),
+          val: tryConvertBytesToString(item.val),
+          id: item.id,
+        };
+      });
+      setMappedData(mappedData);
+    }
+    console.log(mappedData)
+  }, [data]);
+
 
   if (loading) return <Skeleton />
   if (error) navigate('/error');
@@ -49,12 +67,12 @@ export default function Search() {
       <div className="card w-3/4 bg-base-100 shadow-xl">
         <div className="card-body">
           <h2 className="card-title text-center justify-center">Search</h2>
-          <Table loading={loading} headers={['about', 'key', 'val']} contents={data.attestationCreateds} />
+          <Table loading={loading} headers={['about', 'key', 'val']} contents={mappedData} />
           <div className="btn-group grid grid-cols-2">
             <button className="btn btn-outline" disabled={currentPage <= 0} onClick={() => {
               if (currentPage > 0) setCurrentPage(currentPage - 1);
             }}>Previous page</button>
-            <button className="btn btn-outline" disabled={data.attestationCreateds.length != 10} onClick={() => {
+            <button className="btn btn-outline" disabled={mappedData.length != 10} onClick={() => {
               setCurrentPage(currentPage + 1);
             }}>Next</button>
           </div>
