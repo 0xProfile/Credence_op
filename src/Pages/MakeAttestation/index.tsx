@@ -7,6 +7,7 @@ import {
   useNetwork,
   usePrepareContractWrite,
   useContractWrite,
+  useWaitForTransaction,
 } from "wagmi";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
@@ -17,6 +18,7 @@ import {
   OP_GOERIL_RECEIVER_CONTRACT,
 } from "../../constants";
 import contractABI from "../../../contracts/cross-chain/SenderABI.json";
+import './index.css';
 
 interface IAttestDetails {
   about: string;
@@ -49,6 +51,7 @@ export default function MakeAttestation() {
 
   useEffect(() => {
     if (attestDetails) {
+      setAttestHistory([...attestHistory, { about: attestDetails?.about, key: attestDetails?.key, value: attestDetails?.value, isCrossChain: chain?.name === "Goerli"}]);
       sendString?.();
       // @TODO: add to history
     }
@@ -99,7 +102,7 @@ export default function MakeAttestation() {
       return;
     } else {
       const prepAttest = await prepareWriteAttestation(about, key, value);
-      setAttestHistory([...attestHistory, { about, key, value }]);
+      setAttestHistory([...attestHistory, { about, key, value, isCrossChain: false}]);
       const tx = await writeAttestation(prepAttest);
       const receipt = await tx.wait();
     }
@@ -199,11 +202,17 @@ export default function MakeAttestation() {
       <div className="card w-3/4 m-auto bg-base-100 shadow-xl">
         <div className="card-body items-center">
           <h2 className="card-title text-center justify-center">
-            Attestation History
+            Attestations (Current Session Only)
+            <div className="tooltip-trigger">
+              <i className="fas fa-question-circle black">?</i>
+            </div>
+            <div className="tooltip opacity-0 pointer-events-none">
+              Current Session only. Refreshing or closing the page will clear the history.
+            </div>
           </h2>
           <Table
             loading={false}
-            headers={["about", "key", "value"]}
+            headers={["about", "key", "value", "isCrossChain", "status"]}
             contents={attestHistory}
           />
         </div>

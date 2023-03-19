@@ -1,0 +1,23 @@
+.tooltip-trigger {
+  position: relative;
+  display: inline-block;
+}
+
+.tooltip-trigger:hover + .tooltip {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.tooltip {
+  position: absolute;
+  top: -30%; /* Move tooltip to top of tooltip-trigger */
+  left: 0;
+  background-color: white;
+  padding: 1rem;
+  border: 1px solid gray;
+  border-radius: 0.5rem;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease-in-out;
+  word-wrap: break-word;
+}

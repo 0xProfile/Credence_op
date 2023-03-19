@@ -25,6 +25,7 @@
     "@openzeppelin/contracts-upgradeable": "4.7.3",
     "@rainbow-me/rainbowkit": "^0.11.0",
     "@reduxjs/toolkit": "^1.9.3",
+    "@thirdweb-dev/chain-icons": "^1.0.5",
     "@wagmi/cli": "^0.1.10",
     "buffer": "^6.0.3",
     "daisyui": "^2.51.4",
