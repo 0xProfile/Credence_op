@@ -7,7 +7,7 @@ import {
   useNetwork,
   usePrepareContractWrite,
   useContractWrite,
-  useWaitForTransaction,
+  UserRejectedRequestError,
 } from "wagmi";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
@@ -46,10 +46,19 @@ export default function MakeAttestation() {
     ],
   });
 
-  const { write: sendString, data } = useContractWrite(crossChainConfig);
+  const { write: sendString, data } = useContractWrite({...crossChainConfig,     onError(error) {
+    if (error instanceof UserRejectedRequestError) {
+      toast.error("User rejected transaction")
+      setAttestHistory(attestHistory.slice(0, -1));
+      console.error("User rejected transaction")
+    } else {
+      toast.error("Transaction failed")
+      console.error("Transaction failed --", error)
+    }
+  }});
 
   useEffect(() => {
-    if (attestDetails) {
+    if (attestDetails && chain?.name === "Goerli") {
       setAttestHistory([...attestHistory, { about: attestDetails?.about, key: attestDetails?.key, value: attestDetails?.value, isCrossChain: chain?.name === "Goerli"}]);
       sendString?.();
       // @TODO: add to history
@@ -101,9 +110,12 @@ export default function MakeAttestation() {
       return;
     } else {
       const prepAttest = await prepareWriteAttestation(about, key, value);
-      setAttestHistory([{ about, key, value, isCrossChain: false}, ...attestHistory, ]);
-      const tx = await writeAttestation(prepAttest);
-      const receipt = await tx.wait();
+      const tx = await writeAttestation(prepAttest).then((tx) => {
+        setAttestHistory([...attestHistory, { about, key, value, isCrossChain: false, txHash: tx}]);
+      }).catch(() => {
+        toast.error("User rejected transaction")
+        setAttestHistory(attestHistory.slice(0, -1));
+      });
     }
   };
 
