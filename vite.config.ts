@@ -9,9 +9,9 @@ export default defineConfig({
    * Defines global constant replacments
    * @see https://vitejs.dev/config/shared-options.html#define
    */
-  define: {
-    global: "globalThis",
-  },
+  // define: {
+  //   global: "globalThis",
+  // },
   resolve: {
     /**
      * Polyfills nodejs imports
