@@ -10,7 +10,8 @@ import { tryConvertBytes32ToString, tryConvertBytesToString } from "../../utils"
 
 
 export default function Search() {
-  let { searchType, searchValue } = useParams();
+  const { searchType, searchValue } = useParams();
+
   const [currentPage, setCurrentPage] = React.useState(0);
   const [ mappedData, setMappedData ] = React.useState([]);
 
@@ -38,15 +39,16 @@ export default function Search() {
     default:
       return <Error />;
   }
+  let actualSearchValue = searchValue;
 
   if (searchType === 'key') {
     // encode key
-    searchValue = createKey(searchValue)
+    actualSearchValue = createKey(searchValue)
   }
 
   const { loading, error, data } = useQuery(query, {
     variables: {
-      by: searchValue,
+      by: actualSearchValue,
       first: 10,
       skip: currentPage * 10,
     }
