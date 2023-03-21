@@ -3,7 +3,6 @@ import React, { useEffect, useState } from "react";
 import { prepareWriteAttestation, writeAttestation } from "@eth-optimism/atst";
 import {
   useAccount,
-  useSigner,
   useNetwork,
   usePrepareContractWrite,
   useContractWrite,
@@ -19,11 +18,30 @@ import {
 } from "../../constants";
 import contractABI from "../../../contracts/cross-chain/SenderABI.json";
 import './index.css';
+import { Optimism, Ethereum } from "@thirdweb-dev/chain-icons";
 
 interface IAttestDetails {
   about: string;
   key: string;
   value: string;
+}
+
+const CrossChainIndicator = ({ isCrossChain }: { isCrossChain: boolean}) => {
+  if (isCrossChain) {
+    return (
+      <div className="flex items-center justify-center">
+        <Ethereum className="w-6 h-6" />
+        <span className="px-4">&#8594;</span>
+        <Optimism className="w-6 h-6" />
+      </div>
+    );
+  } else {
+    return (
+      <div className="flex items-center justify-center">
+        <Optimism className="w-6 h-6" />
+      </div>
+    );
+  }
 }
 
 export default function MakeAttestation() {
@@ -46,7 +64,7 @@ export default function MakeAttestation() {
     ],
   });
 
-  const { write: sendString } = useContractWrite({...crossChainConfig, onError(error) {
+  const { write: sendString, data : txData } = useContractWrite({...crossChainConfig, onError(error) {
     if (error instanceof UserRejectedRequestError) {
       toast.error("User rejected transaction")
       setAttestHistory(attestHistory.slice(0, -1));
@@ -59,10 +77,8 @@ export default function MakeAttestation() {
 
   useEffect(() => {
     if (attestDetails && chain?.name === "Goerli") {
-      // add hash?
-      setAttestHistory([...attestHistory, {about: attestDetails?.about, key: attestDetails?.key, value: attestDetails?.value, isCrossChain: chain?.name === "Goerli"}]);
       sendString?.();
-      // @TODO: add to history
+      setAttestHistory([...attestHistory, {about: attestDetails?.about, key: attestDetails?.key, value: attestDetails?.value, hash: txData?.hash, isCrossChain: CrossChainIndicator({isCrossChain : chain?.name === "Goerli"}) }]);
     }
   }, [attestDetails]);
 
@@ -111,11 +127,10 @@ export default function MakeAttestation() {
       return;
     } else {
       const prepAttest = await prepareWriteAttestation(about, key, value);
-
       try {
         const tx = await writeAttestation(prepAttest);
         console.log(about, key, value, tx)
-        setAttestHistory([...attestHistory, { about, key, value, isCrossChain: false, hash: tx.hash}]);
+        setAttestHistory([...attestHistory, { about, key, value, isCrossChain: CrossChainIndicator({isCrossChain : false}), hash: tx.hash}]);
       } catch (error) {
         toast.error("User rejected transaction")
         setAttestHistory(attestHistory.slice(0, -1));
