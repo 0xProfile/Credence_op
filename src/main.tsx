@@ -32,7 +32,7 @@ const Router = createBrowserRouter([{
   errorElement: <Error />,
   children: [
     { index: true, element: <Home /> },
-    { path: "attestation/:attestationId", element: <Attestation /> },
+    { path: "attestation/:attestationHash", element: <Attestation /> },
     { path: "make/attestation", element: <MakeAttestation /> },
     { path: "search/:searchType/:searchValue", element: <Search /> },
   ],

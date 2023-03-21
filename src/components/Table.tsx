@@ -2,17 +2,55 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import Skeleton from "./Skeleton";
 import { Optimism, Ethereum } from "@thirdweb-dev/chain-icons";
+import { useWaitForTransaction, useWatchPendingTransactions } from "wagmi";
 
 interface ITableProps {
   headers: string[];
-  contents: (Record<string, string | boolean> & { id: string })[]; // add boolean type to contents and specify 'id' field
+  contents: (Record<string, string | JSX.Element> & { hash: `0x${string}` })[]; // add boolean type to contents and specify 'id' field
   loading?: boolean;
   isCrossChain?: boolean; // optional parameter for displaying isCrossChain column
 }
 
-export const Table = ({ headers, contents, loading = false, isCrossChain = false }: ITableProps) => {
+interface IRowProps {
+  // a record of string and function that returns JSX.Element
+  content: Record<string, string | JSX.Element> & { hash: `0x${string}` };
+
+  headers: string[];
+}
+
+const Row = ({content, headers} : IRowProps) => {
+  const {isLoading} = useWaitForTransaction({
+    confirmations: 8,
+    hash: content.hash,
+  });
+
   const navigate = useNavigate();
 
+  console.log(content);
+  return <tr
+      key={`tr-${content.hash}`}
+      className="cursor-pointer"
+      onClick={() => {
+        !isLoading && navigate(`/attestation/${content["hash"]}`);
+      }}
+    >
+    {
+      headers.map((header, td_index) => {
+          return (
+            <td key={`td-${td_index}`} className="overflow-hidden text-ellipsis">
+              {content[header]}
+            </td>
+          )
+        })
+    }
+    <td className="overflow-hidden text-ellipsis">
+      {isLoading ? "Pending..." : "Finished"}
+    </td>
+  </tr>
+
+}
+
+export const Table = ({ headers, contents, loading = false, isCrossChain = false }: ITableProps) => {
   if (loading) return <Skeleton />;
 
   if (isCrossChain) {
@@ -27,41 +65,13 @@ export const Table = ({ headers, contents, loading = false, isCrossChain = false
             {headers.map((header, index) => (
               <th key={`header-${index}`}>{header}</th>
             ))}
+            <th >Status</th>
           </tr>
         </thead>
         <tbody>
-          {contents.map((content, tr_index) => (
-            <tr
-              key={`tr-${tr_index}`}
-              className="cursor-pointer"
-              onClick={() => {
-                navigate(`/attestation/${content["id"]}`);
-              }}
-            >
-              {headers.map((header, td_index) => {
-                if (header === "isCrossChain") {
-                  // TODO: should put it outside of Table, we can pass a jsx object instead of boolean
-                  return (
-                    <td key={`td-${td_index}`} className="overflow-hidden text-ellipsis">
-                      {content[header] ?
-                        <div className="flex items-center justify-center">
-                          <Ethereum className="w-6 h-6" />
-                          <span className="px-4">&#8594;</span>
-                          <Optimism className="w-6 h-6" />
-                        </div> :
-                        <div className="flex items-center justify-center"> <Optimism className="w-6 h-6" /> </div>}
-                    </td>
-                  );
-                } else {
-                  return (
-                    <td key={`td-${td_index}`} className="overflow-hidden text-ellipsis">
-                      {content[header]}
-                    </td>
-                  );
-                }
-              })}
-            </tr>
-          ))}
+          {contents.map((content, index) => {
+            return <Row content={content} headers={headers} key={`row-${index}`} />
+          })}
         </tbody>
       </table>
     </div>

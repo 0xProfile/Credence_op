@@ -8,9 +8,9 @@ import { useNetwork } from "wagmi";
 import { parseHexString } from "../../utils";
 
 export default function attestation() {
-  const { attestationId } = useParams();
-  const { loading, error, data } = useQuery(querys.QUERY_BY_ASSET_ID, {
-    variables: { assetId: attestationId },
+  const { attestationHash } = useParams();
+  const { loading, error, data } = useQuery(querys.QUERY_BY_ASSET_HASH, {
+    variables: { assetHash: attestationHash },
   });
   const navigate = useNavigate();
 
@@ -18,6 +18,8 @@ export default function attestation() {
 
   if (error) navigate('/error');
   if (loading) return <Skeleton />;
+
+  console.log(data);
 
   return (
     <div className="container p-2 m-auto flex justify-center">
@@ -27,19 +29,19 @@ export default function attestation() {
           <div className="flex flex-col justify-center items-center">
             <div className="flex flex-row justify-center items-center">
               <span className="text-xl font-bold">About: </span>
-              <span className="text-xl">{data.attestationCreated.about}</span>
+              <span className="text-xl">{data.attestationCreateds[0].about}</span>
             </div>
             <div className="flex flex-row justify-center items-center">
               <span className="text-xl font-bold">Key: </span>
-              <span className="text-xl">{ethers.utils.parseBytes32String(data.attestationCreated.key)}</span>
+              <span className="text-xl">{ethers.utils.parseBytes32String(data.attestationCreateds[0].key)}</span>
             </div>
             <div className="flex flex-row justify-center items-center">
               <span className="text-xl font-bold">Value: </span>
-              <span className="text-xl">{String.fromCharCode(...parseHexString(data.attestationCreated.val as string))}</span>
+              <span className="text-xl">{String.fromCharCode(...parseHexString(data.attestationCreateds[0].val as string))}</span>
             </div>
             <div className="flex flex-row justify-center items-center">
               <span className="text-xl font-bold">Transaction: </span>
-              <a className="text-xl link" href={`${network.chain?.blockExplorers?.default.url}/tx/${data.attestationCreated.transactionHash}`} target="_blank">{data.attestationCreated.transactionHash}</a>
+              <a className="text-xl link" href={`${network.chain?.blockExplorers?.default.url}/tx/${data.attestationCreateds[0].transactionHash}`} target="_blank">{data.attestationCreateds[0].transactionHash}</a>
             </div>
           </div>
         </div>

@@ -20,7 +20,7 @@ export default function Home() {
           // TODO: fix parsing error?
           key: tryConvertBytes32ToString(item.key),
           value: tryConvertBytesToString(item.val),
-          id: item.id,
+          hash: item.transactionHash,
         };
       });
       setMappedData(mappedData);

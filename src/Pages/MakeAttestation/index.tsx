@@ -46,7 +46,7 @@ export default function MakeAttestation() {
     ],
   });
 
-  const { write: sendString, data } = useContractWrite({...crossChainConfig,     onError(error) {
+  const { write: sendString } = useContractWrite({...crossChainConfig, onError(error) {
     if (error instanceof UserRejectedRequestError) {
       toast.error("User rejected transaction")
       setAttestHistory(attestHistory.slice(0, -1));
@@ -59,7 +59,8 @@ export default function MakeAttestation() {
 
   useEffect(() => {
     if (attestDetails && chain?.name === "Goerli") {
-      setAttestHistory([...attestHistory, { about: attestDetails?.about, key: attestDetails?.key, value: attestDetails?.value, isCrossChain: chain?.name === "Goerli"}]);
+      // add hash?
+      setAttestHistory([...attestHistory, {about: attestDetails?.about, key: attestDetails?.key, value: attestDetails?.value, isCrossChain: chain?.name === "Goerli"}]);
       sendString?.();
       // @TODO: add to history
     }
@@ -110,12 +111,16 @@ export default function MakeAttestation() {
       return;
     } else {
       const prepAttest = await prepareWriteAttestation(about, key, value);
-      const tx = await writeAttestation(prepAttest).then((tx) => {
-        setAttestHistory([...attestHistory, { about, key, value, isCrossChain: false, txHash: tx}]);
-      }).catch(() => {
+
+      try {
+        const tx = await writeAttestation(prepAttest);
+        console.log(about, key, value, tx)
+        setAttestHistory([...attestHistory, { about, key, value, isCrossChain: false, hash: tx.hash}]);
+      } catch (error) {
         toast.error("User rejected transaction")
         setAttestHistory(attestHistory.slice(0, -1));
-      });
+      }
+
     }
   };
 
@@ -223,7 +228,7 @@ export default function MakeAttestation() {
           </h2>
           <Table
             loading={false}
-            headers={["about", "key", "value", "isCrossChain", "status"]}
+            headers={["about", "key", "value", "isCrossChain"]}
             contents={attestHistory}
           />
         </div>

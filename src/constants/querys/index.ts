@@ -1,8 +1,8 @@
 import { gql } from "@apollo/client";
 
-const QUERY_BY_ASSET_ID = gql`
-  query QueryByAssetId($assetId: String!) {
-    attestationCreated(id: $assetId) {
+const QUERY_BY_ASSET_HASH = gql`
+  query QueryByAssetHash($assetHash: String!) {
+    attestationCreateds(where: { transactionHash: $assetHash }) {
       id
       about
       key
@@ -51,8 +51,14 @@ const LATEST_ATTESTATION = gql`
       val
       blockNumber
       blockTimestamp
+      transactionHash
     }
   }
 `;
 
-export { LATEST_ATTESTATION, QUERY_BY_ASSET_ID, QUERY_BY_ABOUT, QUERY_BY_KEY };
+export {
+  LATEST_ATTESTATION,
+  QUERY_BY_ASSET_HASH,
+  QUERY_BY_ABOUT,
+  QUERY_BY_KEY,
+};
