@@ -4,7 +4,7 @@ export const searchSlice = createSlice({
   name: "searchValue",
   initialState: {
     searchValue: "",
-    searchType: "Addr",
+    searchType: "About",
   },
   reducers: {
     updateSearchValue: (state, action) => {

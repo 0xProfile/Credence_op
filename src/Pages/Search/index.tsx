@@ -19,6 +19,15 @@ export default function Search() {
   if (searchType === undefined || searchValue === undefined || searchType === '' || searchValue === '') return <Error />;
 
   let query = undefined;
+
+  document.addEventListener('keydown', (e: any) => {
+    if (e.key === 'Enter') {
+      if (searchValue !== '' && searchType !== '') {
+        setCurrentPage(0);
+      }
+    }
+  });
+
   switch (searchType) {
     case 'about':
       query = querys.QUERY_BY_ABOUT;
@@ -55,7 +64,6 @@ export default function Search() {
       });
       setMappedData(mappedData);
     }
-    console.log(mappedData)
   }, [data]);
 
 
