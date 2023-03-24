@@ -1,11 +1,14 @@
 <div align="center">
   <a href="https://optimism.io"><img alt="Optimism" src="https://raw.githubusercontent.com/ethereum-optimism/brand-kit/main/assets/svg/OPTIMISM-R.svg" width=320></a>
   <br />
-   <br />
+  <br />
+  ✦
+  <br />
+   <a href="https://optimism.io"><img alt="Optimism" src="./src/assets/header-logo2.png" width=160></a>
 </div>
 
 ## What is the purpose of Credence and how does it work?
-[Credence](https://credence.0xprofile.space/) is a platform that simplifies tracking and verifying identity and reputation on Optimism's AttestationStation for developers and users.
+[Credence](https://credence.0xprofile.space/) is a platform that simplifies tracking and verifying identity and reputation on **Optimism's AttestationStation** for developers and users.
 
 It enables cross-chain attestation, breaking down barriers between different networks, and offers a user-friendly interface, by providing an easy-to-read dashboard, search feature, and graph visualizations.
 
