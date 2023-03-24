@@ -78,7 +78,7 @@ export default function MakeAttestation() {
   useEffect(() => {
     if (attestDetails && chain?.name === "Goerli") {
       sendString?.();
-      setAttestHistory([...attestHistory, {about: attestDetails?.about, key: attestDetails?.key, value: attestDetails?.value, hash: txData?.hash, isCrossChain: CrossChainIndicator({isCrossChain : chain?.name === "Goerli"}) }]);
+      setAttestHistory([...attestHistory, {about: attestDetails?.about, key: attestDetails?.key, value: attestDetails?.value, hash: txData?.hash, isCrossChain: chain?.name === "Goerli", crossChainIndicator: CrossChainIndicator({isCrossChain : chain?.name === "Goerli"}) }]);
     }
   }, [attestDetails]);
 
@@ -130,7 +130,7 @@ export default function MakeAttestation() {
       try {
         const tx = await writeAttestation(prepAttest);
         console.log(about, key, value, tx)
-        setAttestHistory([...attestHistory, { about, key, value, isCrossChain: CrossChainIndicator({isCrossChain : false}), hash: tx.hash}]);
+        setAttestHistory([...attestHistory, { about, key, value, hash: tx.hash, isCrossChain: false, crossChainIndicator: CrossChainIndicator({isCrossChain : false})}]);
       } catch (error) {
         toast.error("User rejected transaction")
         setAttestHistory(attestHistory.slice(0, -1));
@@ -243,7 +243,7 @@ export default function MakeAttestation() {
           </h2>
           <Table
             loading={false}
-            headers={["about", "key", "value", "isCrossChain"]}
+            headers={["about", "key", "value", "crossChainIndicator"]}
             contents={attestHistory}
           />
         </div>

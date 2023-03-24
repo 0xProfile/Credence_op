@@ -4,9 +4,9 @@ import { useWaitForTransaction } from "wagmi";
 
 interface ITableProps {
   headers: string[];
-  contents: (Record<string, string | JSX.Element > & { hash: `0x${string}` } & { isCrossChain?: JSX.Element })[];
+  contents: (Record<string, string | JSX.Element > & { hash: `0x${string}` } & { crossChainIndicator?: JSX.Element } & {isCrossChain? : boolean})[];
   loading?: boolean;
-  isCrossChain?: JSX.Element; // optional parameter for displaying isCrossChain column
+  crossChainIndicator?: JSX.Element; // optional parameter for displaying isCrossChain column
 }
 
 interface IRowProps {
@@ -52,11 +52,15 @@ const Row = ({ content, headers }: IRowProps) => {
 
 }
 
-export const Table = ({ headers, contents, loading = false, isCrossChain}: ITableProps) => {
+export const Table = ({ headers, contents, loading = false, isCrossChain, crossChainIndicator}: ITableProps) => {
   if (loading) return <Skeleton />;
 
   if (isCrossChain) {
     headers.push("isCrossChain"); // add header for isCrossChain column
+  }
+
+  if (crossChainIndicator) {
+    headers.push("crossChainIndicator"); // add header for isCrossChain column
   }
 
   return (
