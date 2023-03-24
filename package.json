@@ -15,6 +15,7 @@
     "wagmi": "wagmi generate"
   },
   "dependencies": {
+    "@antv/g6": "^4.8.8",
     "@apollo/client": "^3.7.10",
     "@eth-optimism/atst": "^0.0.0-20230306200511",
     "@eth-optimism/contracts-bedrock": "^0.12.1",

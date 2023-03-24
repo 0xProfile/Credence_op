@@ -51,6 +51,7 @@ export const Header = () => {
       </div>
       <div className="btn-group p-4">
         <button onClick={() => (locaction.pathname != '/make/attestation') && navigate('/make/attestation')} className="btn btn-active">Make Attest</button>
+        <button onClick={() => locaction.pathname != '/graphsearch' && navigate('graphsearch')} className="btn btn-active">Graph Search</button>
       </div>
       <ConnectButton showBalance={false} />
     </div>

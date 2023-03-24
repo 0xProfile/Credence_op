@@ -15,16 +15,15 @@ import Home from "./Pages/Home";
 import Error from "./Pages/Error";
 import MakeAttestation from "./Pages/MakeAttestation";
 import Search from "./Pages/Search";
+import Graph from "./Pages/Graph";
+import GraphSearch from "./Pages/Graph/Search";
 
 import store from "./store";
 
 import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client'
 import { APIURL } from "./constants";
 
-import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
-
 
 const Router = createBrowserRouter([{
   path: "/",
@@ -35,6 +34,8 @@ const Router = createBrowserRouter([{
     { path: "attestation/:attestationHash", element: <Attestation /> },
     { path: "make/attestation", element: <MakeAttestation /> },
     { path: "search/:searchType/:searchValue", element: <Search /> },
+    { path: "graph/:searchKey", element: <Graph />},
+    { path: "graphsearch", element: <GraphSearch />}
   ],
 }]);
 

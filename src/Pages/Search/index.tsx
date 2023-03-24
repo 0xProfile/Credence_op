@@ -68,9 +68,8 @@ export default function Search() {
     }
   }, [data]);
 
-
   if (loading) return <Skeleton />
-  if (error) navigate('/error');
+  if (error) return <Skeleton />
 
   return (
     <div className="container p-2 flex m-auto justify-center">

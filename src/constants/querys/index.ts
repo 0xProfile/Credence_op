@@ -38,6 +38,7 @@ const QUERY_BY_KEY = gql`
       blockNumber
       blockTimestamp
       transactionHash
+      creator
     }
   }
 `;
