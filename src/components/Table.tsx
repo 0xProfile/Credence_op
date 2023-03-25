@@ -1,11 +1,13 @@
 import { useNavigate } from "react-router-dom";
 import Skeleton from "./Skeleton";
 import { useWaitForTransaction } from "wagmi";
+import { toast } from "react-toastify";
 
 interface ITableProps {
   headers: string[];
   contents: (Record<string, string | JSX.Element > & { hash: `0x${string}` } & { crossChainIndicator?: JSX.Element } & {isCrossChain? : boolean})[];
   loading?: boolean;
+  isCrossChain?: boolean; // optional parameter for displaying isCrossChain column
   crossChainIndicator?: JSX.Element; // optional parameter for displaying isCrossChain column
 }
 
@@ -19,19 +21,24 @@ interface IRowProps {
 const Row = ({ content, headers }: IRowProps) => {
   const { isLoading } = useWaitForTransaction({
     chainId: content["isCrossChain"] ? 1 : 420, // to ensure it always fetch from the right chain and TODO: make it dynamic
-    confirmations: 8,
+    confirmations: 2,
     hash: content.hash,
   });
 
   const navigate = useNavigate();
 
-  console.log(content);
   return <tr
     key={`tr-${content.hash}`}
     className="cursor-pointer"
     onClick={() => {
-      if (!isLoading && !content["isCrossChain"]) {
+      if (isLoading) {
+        toast.info("Transaction is still pending");
+        return ;}
+      if (!content["isCrossChain"]) {
         navigate(`/attestation/${content["hash"]}`);
+      } else if(content["isCrossChain"]) {
+        //@ts-ignore
+        window.open(`https://explorer.hyperlane.xyz/?search=${content.hash}`, "_blank");
       }
     }}
   >

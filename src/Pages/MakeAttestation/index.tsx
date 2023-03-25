@@ -78,9 +78,15 @@ export default function MakeAttestation() {
   useEffect(() => {
     if (attestDetails && chain?.name === "Goerli") {
       sendString?.();
-      setAttestHistory([...attestHistory, {about: attestDetails?.about, key: attestDetails?.key, value: attestDetails?.value, hash: txData?.hash, isCrossChain: chain?.name === "Goerli", crossChainIndicator: CrossChainIndicator({isCrossChain : chain?.name === "Goerli"}) }]);
     }
   }, [attestDetails]);
+
+  useEffect(() => {
+    if (!txData) return;
+    if (chain?.name !== "Goerli") return;
+    if (!attestDetails) return;
+    setAttestHistory([...attestHistory, {about: attestDetails?.about, key: attestDetails?.key, value: attestDetails?.value, hash: txData?.hash, isCrossChain: chain?.name === "Goerli", crossChainIndicator: CrossChainIndicator({isCrossChain : chain?.name === "Goerli"}) }]);
+  }, [txData, attestDetails])
 
   const navigate = useNavigate();
   if (!isConnected) {

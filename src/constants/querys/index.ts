@@ -44,8 +44,13 @@ const QUERY_BY_KEY = gql`
 `;
 
 const LATEST_ATTESTATION = gql`
-  query LatestAttestation {
-    attestationCreateds(orderBy: blockNumber, orderDirection: desc, first: 10) {
+  query LatestAttestation($first: Int!, $skip: Int!) {
+    attestationCreateds(
+      orderBy: blockNumber
+      orderDirection: desc
+      first: $first
+      skip: $skip
+    ) {
       id
       about
       key
